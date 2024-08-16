@@ -54,4 +54,4 @@ npx prism studio
 DB: MySQL
 host in aiven
 
-Next section is edit course
+2:22:08 EditCoursePage Section
