@@ -30,8 +30,8 @@ model Course {
   subCategoryId String
   subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
 
-  levelId String
-  level   Level  @relation(fields: [levelId], references: [id])
+  levelId String?
+  level   Level?  @relation(fields: [levelId], references: [id])
 
   createdAt DateTime @default(now())
   updateAt  DateTime @default(now())
@@ -42,10 +42,10 @@ model Course {
 }
 
 model Category {
-  id          String        @id @default(uuid())
-  name        String        @unique
+  id            String        @id @default(uuid())
+  name          String        @unique
   subCategories SubCategory[]
-  courses     Course[]
+  courses       Course[]
 }
 
 model SubCategory {
