@@ -27,7 +27,7 @@ const CoursesPage = async () => {
       </Link>
       <div className="mt-10">
         {courses.map((course) => (
-          <Link href={`/instructor/courses/${course.id}/basic`}>
+          <Link href={`/instructor/courses/${course.id}/basic`} key={course.id}>
             {course.title}
           </Link>
         ))}
