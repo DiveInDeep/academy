@@ -54,4 +54,6 @@ npx prism studio
 DB: MySQL
 host in aiven
 
-2:22:08 EditCoursePage Section
+FTP: uploadthing
+
+3:01:38 EditCoursePage Section

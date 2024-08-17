@@ -19,7 +19,6 @@ const CoursesPage = async () => {
       createdAt: "desc",
     },
   });
-  console.log(courses, "this is the course page's courses::::")
 
   return (
     <div className="px-6 py-4">
@@ -27,14 +26,11 @@ const CoursesPage = async () => {
         <Button>Create New Course</Button>
       </Link>
       <div className="mt-10">
-        {courses.map((course) => {
-          console.log(course, "this is the course page's courses::::")
-          return (
-            <Link href={`/instructor/courses/${course.id}/basic`}>
-              {course.title}
-            </Link>
-          );
-        })}
+        {courses.map((course) => (
+          <Link href={`/instructor/courses/${course.id}/basic`}>
+            {course.title}
+          </Link>
+        ))}
       </div>
     </div>
   );
