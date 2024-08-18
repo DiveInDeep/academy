@@ -1,6 +1,6 @@
 "use client";
 
-import { Course } from "@prisma/client";
+import { Course, Section } from "@prisma/client";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import axios from "axios";
+import SectionList from "./SectionList";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -26,7 +27,11 @@ const formSchema = z.object({
   }),
 });
 
-const CreateSectionForm = ({ course }: { course: Course }) => {
+const CreateSectionForm = ({
+  course,
+}: {
+  course: Course & { sections: Section[] };
+}) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -61,17 +66,38 @@ const CreateSectionForm = ({ course }: { course: Course }) => {
       console.log("Failed to create a new section", err);
     }
   };
+
+  const onReorder = async (updateData: { id: string; position: number }[]) => {
+    try {
+      await axios.put(`/api/courses/${course.id}/sections/reorder`, {
+        list: updateData,
+      });
+      toast.success("Sections Reordered Successfully!");
+    } catch (err) {
+      console.log("Failed to order sections ", err);
+      toast.error("Something Went Wrong!");
+    }
+  };
+
   return (
     <div className="px-10 py-6">
       <div className="flex gap-5">
         {routes.map((route) => (
-          <Link href={route.path} className="flex gap-4">
+          <Link href={route.path} key={route.path}>
             <Button variant={pathname === route.path ? "default" : "outline"}>
               {route.label}
             </Button>
           </Link>
         ))}
       </div>
+
+      <SectionList
+        items={course.sections || []}
+        onReorder={onReorder}
+        onEdit={(id) =>
+          router.push(`/instructor/courses/${course.id}/sections/${id}`)
+        }
+      />
 
       <h1 className="text-xl font-bold mt-5">Add New Section</h1>
 
