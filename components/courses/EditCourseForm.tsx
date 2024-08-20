@@ -104,7 +104,7 @@ const EditCourseForm = ({
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
         <div className="flex gap-5">
           {routes.map((route) => (
-            <Link href={route.path} className="flex gap-4">
+            <Link href={route.path} key={route.path}>
               <Button variant={pathname === route.path ? "default" : "outline"}>
                 {route.label}
               </Button>
@@ -235,6 +235,7 @@ const EditCourseForm = ({
                     value={field.value || ""}
                     onChange={(url) => field.onChange(url)}
                     endpoint="courseBanner"
+                    page="Edit Course"
                   />
                 </FormControl>
                 <FormMessage />

@@ -15,10 +15,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ComboBox } from "../custom/ComboBox";
+import { ComboBox } from "@/components/custom/ComboBox";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -51,17 +52,18 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
     },
   });
 
+  const { isValid, isSubmitting } = form.formState;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const response = await axios.post("/api/courses", values);
-      router.push(`/instructor/courses/${response.data.id}/basics`);
+      router.push(`/instructor/courses/${response.data.id}/basic`);
       toast.success("New Course Created!");
     } catch (err) {
       console.log("Failed to create new course", err);
       toast.error("Something Went Wrong!");
     }
   };
-
   return (
     <div className="p-10">
       <h1 className="text-xl font-bold">
@@ -112,7 +114,7 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
             name="subCategoryId"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>SubCategory</FormLabel>
+                <FormLabel>Subcategory</FormLabel>
                 <FormControl>
                   <ComboBox
                     options={
@@ -128,7 +130,13 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={!isValid || isSubmitting}>
+            {isSubmitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Create"
+            )}
+          </Button>
         </form>
       </Form>
     </div>

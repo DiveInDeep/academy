@@ -71,7 +71,7 @@ model Level {
 model Section {
   id          String  @id @default(uuid())
   title       String
-  desctiption String? @db.Text
+  description String? @db.Text
   videoUrl    String? @db.Text
   position    Int
   isPublished Boolean @default(false)
@@ -82,7 +82,7 @@ model Section {
 
   muxData MuxData?
 
-  resource Resource[]
+  resources Resource[]
 
   progress Progress[]
 

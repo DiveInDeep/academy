@@ -8,7 +8,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
-import { Grip } from "lucide-react";
+import { Grip, Pencil } from "lucide-react";
 
 interface SectionListProps {
   items: Section[];
@@ -79,6 +79,14 @@ const SectionList = ({ items, onReorder, onEdit }: SectionListProps) => {
                       <Grip className="h-4 w-4 cursor-pointer mr-4 hover:text-[#FDAB04]" />
                     </div>
                     {section.title}
+                    <div className="ml-auto">
+                      {
+                        <Pencil
+                          className="h-4 w-4 cursor-pointer hover:text-[#FDAB04]"
+                          onClick={() => onEdit(section.id)}
+                        />
+                      }
+                    </div>
                   </div>
                 )}
               </Draggable>
