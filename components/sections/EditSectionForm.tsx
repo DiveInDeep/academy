@@ -23,7 +23,8 @@ import Link from "next/link";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { ArrowLeft, Trash } from "lucide-react";
+import { ArrowLeft, Loader2, Trash } from "lucide-react";
+import MuxPlayer from "@mux/mux-player-react";
 import ResourceForm from "./ResourceForm";
 
 const formSchema = z.object({
@@ -59,14 +60,19 @@ const EditSectionForm = ({
     },
   });
 
+  const { isValid, isSubmitting } = form.formState;
+
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
+      await axios.post(
+        `/api/courses/${courseId}/sections/${section.id}`,
+        values
+      );
       router.refresh();
-      toast.success("Course Updated");
+      toast.success("Section Updated");
     } catch (err) {
-      console.log("Failed to update the course", err);
+      console.log("Failed to update the section", err);
       toast.error("Something Went Wrong!");
     }
   };
@@ -129,7 +135,14 @@ const EditSectionForm = ({
               </FormItem>
             )}
           />
-
+          {section.videoUrl && (
+            <div className="my-5">
+              <MuxPlayer
+                playbackId={section.muxData?.playbackId || ""}
+                className="md:max-w-[600px]"
+              />
+            </div>
+          )}
           <FormField
             control={form.control}
             name="videoUrl"
@@ -176,7 +189,13 @@ const EditSectionForm = ({
                 Cancel
               </Button>
             </Link>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Save"
+              )}
+            </Button>
           </div>
         </form>
       </Form>
