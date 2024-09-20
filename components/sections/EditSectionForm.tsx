@@ -26,6 +26,7 @@ import toast from "react-hot-toast";
 import { ArrowLeft, Loader2, Trash } from "lucide-react";
 import MuxPlayer from "@mux/mux-player-react";
 import ResourceForm from "./ResourceForm";
+import Delete from "../custom/Delete";
 
 const formSchema = z.object({
   title: z.string().min(2).min(2, {
@@ -88,9 +89,7 @@ const EditSectionForm = ({
         </Link>
         <div className="flex gap-4 item-start">
           <Button variant="outline">Publish</Button>
-          <Button>
-            <Trash className="h-4 w-4" />
-          </Button>
+          <Delete item="selection" courseId={courseId} sectionId={section.id} />
         </div>
       </div>
 
