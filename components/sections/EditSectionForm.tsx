@@ -27,6 +27,7 @@ import { ArrowLeft, Loader2, Trash } from "lucide-react";
 import MuxPlayer from "@mux/mux-player-react";
 import ResourceForm from "./ResourceForm";
 import Delete from "../custom/Delete";
+import PublishButton from "../custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(2).min(2, {
@@ -88,7 +89,13 @@ const EditSectionForm = ({
           </Button>
         </Link>
         <div className="flex gap-4 item-start">
-          <Button variant="outline">Publish</Button>
+          <PublishButton
+            disabled={!isCompleted}
+            courseId={courseId}
+            sectionId={section.id}
+            isPublished={section.isPublished}
+            page="Section"
+          />
           <Delete item="selection" courseId={courseId} sectionId={section.id} />
         </div>
       </div>
@@ -106,7 +113,10 @@ const EditSectionForm = ({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>
+                  Title
+                  <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Ex: Instruction to Web Development"
@@ -123,7 +133,10 @@ const EditSectionForm = ({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Description
+                  <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <RichEditor
                     placeholder="What is this section about?"
@@ -147,7 +160,10 @@ const EditSectionForm = ({
             name="videoUrl"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Video</FormLabel>
+                <FormLabel>
+                  Video
+                  <span className="text-red-500">*</span>
+                </FormLabel>
                 <FormControl>
                   <FileUpload
                     value={field.value || ""}
