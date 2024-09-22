@@ -190,7 +190,7 @@ const EditCourseForm = ({
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>
-                    Category<span className="text-red-500">*</span>
+                    Category <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <ComboBox options={categories} {...field} />
@@ -205,7 +205,9 @@ const EditCourseForm = ({
               name="subCategoryId"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>SubCategory</FormLabel>
+                  <FormLabel>
+                    SubCategory <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
                     <ComboBox
                       options={
