@@ -5,7 +5,7 @@ const getCoursesByCategory = async (
   categoryId: string | null
 ): Promise<Course[]> => {
   const whereClause: any = {
-    ...(categoryId ? { categoryId } : {}),
+    ...(categoryId ? { categoryId, isPublished: true } : { isPublished: true }),
   };
 
   const course = await db.course.findMany({
