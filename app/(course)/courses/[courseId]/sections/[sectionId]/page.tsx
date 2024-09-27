@@ -1,5 +1,8 @@
+import SectionDetails from "@/components/sections/SectionsDetails";
+import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { Resource } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 const SectionDetailsPage = async ({
@@ -14,13 +17,9 @@ const SectionDetailsPage = async ({
   const { userId } = auth();
 
   if (!userId) return redirect("/sign-in");
-  const course = db.course.findUnique({
+
+  const course = await db.course.findUnique({
     where: { id: courseId, isPublished: true },
-    include: {
-      sections: {
-        where: { isPublished: true },
-      },
-    },
   });
 
   if (!course) {
@@ -35,12 +34,35 @@ const SectionDetailsPage = async ({
     return redirect(`/courses/${courseId}/overview`);
   }
 
+  const purchase = await db.purchase.findUnique({
+    where: {
+      customerId_courseId: {
+        customerId: userId,
+        courseId,
+      },
+    },
+  });
+
+  let muxData = null;
+  let resources: Resource[] = [];
+  const progress = await db.progress.findUnique({
+    where: {
+      studentId_sectionId: {
+        studentId: userId,
+        sectionId,
+      },
+    },
+  });
+
   return (
-    <div className="px-6 py-4 flex flex-col gap-5">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-        <h1 className="text-2xl font-bold max-md:mb-4">{section.title}</h1>
-      </div>
-    </div>
+    <SectionDetails
+      course={course}
+      section={section}
+      purchase={purchase}
+      muxData={muxData}
+      resources={resources}
+      progress={progress}
+    />
   );
 };
 

@@ -35,8 +35,10 @@ model Course {
 
   sections Section[]
 
+  purchases Purchase[]
+
   createdAt DateTime @default(now())
-  updateAt  DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@index([categoryId])
   @@index([subCategoryId])
@@ -118,8 +120,8 @@ model Resource {
 }
 
 model Progress {
-  id         String @id @default(uuid())
-  stundentId String @unique
+  id        String @id @default(uuid())
+  studentId String 
 
   sectionId String
   section   Section @relation(fields: [sectionId], references: [id], onDelete: Cascade)
@@ -127,7 +129,31 @@ model Progress {
   isCompleted Boolean @default(false)
 
   createdAt DateTime @default(now())
-  updateAt  DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@index([sectionId])
+  @@unique([studentId, sectionId])
+}
+
+model Purchase {
+  id         String @id @default(uuid())
+  customerId String 
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([courseId])
+  @@unique([customerId, courseId])
+}
+
+model StripeCustomer {
+  id               String @id @default(uuid())
+  customerId       String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
