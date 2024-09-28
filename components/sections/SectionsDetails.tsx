@@ -69,12 +69,12 @@ const SectionsDetails = ({
       <ReadText value={section.description!} />
 
       {isLocked ? (
-        <div className="px-10 flex flex-col gap-5 items-center bg-[#FFF8EB]">
-          <Lock className="h-8 w-8" />
-          <p className="text-sm font-bold">
-            Video for this section is locked!. Please buy the course to access
-          </p>
-        </div>
+        <div className="py-10 flex flex-col gap-5 items-center bg-[#FFF8EB]">
+        <Lock className="h-8 w-8" />
+        <p className="text-sm font-bold">
+          Video for this section is locked!. Please buy the course to access
+        </p>
+      </div>
       ) : (
         <MuxPlayer
           playbackId={muxData?.playbackId || ""}
