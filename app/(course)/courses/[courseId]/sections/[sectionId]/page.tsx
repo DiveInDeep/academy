@@ -44,6 +44,23 @@ const SectionDetailsPage = async ({
 
   let muxData = null;
   let resources: Resource[] = [];
+
+  if (section.isFree || purchase) {
+    muxData = await db.muxData.findUnique({
+      where: {
+        sectionId,
+      },
+    });
+  }
+
+  if (purchase) {
+    resources = await db.resource.findMany({
+      where: {
+        sectionId,
+      },
+    });
+  }
+
   const progress = await db.progress.findUnique({
     where: {
       studentId_sectionId: {
