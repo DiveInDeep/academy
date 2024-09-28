@@ -1,10 +1,14 @@
+import Stripe from "stripe";
+import { NextRequest, NextResponse } from "next/server";
+import { currentUser } from "@clerk/nextjs/server";
+
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
-import { currentUser } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 
-export const POST = async (req: NextRequest, params: { courseId: string }) => {
+export const POST = async (
+  req: NextRequest,
+  { params }: { params: { courseId: string } }
+) => {
   try {
     const user = await currentUser();
 
@@ -13,19 +17,16 @@ export const POST = async (req: NextRequest, params: { courseId: string }) => {
     }
 
     const course = await db.course.findUnique({
-      where: {
-        id: params.courseId,
-        isPublished: true,
-      },
+      where: { id: params.courseId, isPublished: true },
     });
 
     if (!course) {
       return new NextResponse("Course Not Found", { status: 404 });
     }
 
-    const purchase = await db.purchases.findUnique({
+    const purchase = await db.purchase.findUnique({
       where: {
-        customerId_courseId: { courseId: course.id, customerId: user.id },
+        customerId_courseId: { customerId: user.id, courseId: course.id },
       },
     });
 
@@ -47,12 +48,8 @@ export const POST = async (req: NextRequest, params: { courseId: string }) => {
     ];
 
     let stripeCustomer = await db.stripeCustomer.findUnique({
-      where: {
-        customerId: user.id,
-      },
-      select: {
-        stripeCustomerId: true,
-      },
+      where: { customerId: user.id },
+      select: { stripeCustomerId: true },
     });
 
     if (!stripeCustomer) {
@@ -80,6 +77,7 @@ export const POST = async (req: NextRequest, params: { courseId: string }) => {
         customerId: user.id,
       },
     });
+
     return NextResponse.json({ url: session.url });
   } catch (err) {
     console.log("[courseId_checkout_POST]", err);

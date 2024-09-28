@@ -1,5 +1,4 @@
 import SectionDetails from "@/components/sections/SectionsDetails";
-import { Button } from "@/components/ui/button";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { Resource } from "@prisma/client";
