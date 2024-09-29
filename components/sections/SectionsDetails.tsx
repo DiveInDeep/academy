@@ -16,6 +16,7 @@ import { File, Loader2, Lock } from "lucide-react";
 import ReadText from "../custom/ReadText";
 import MuxPlayer from "@mux/mux-player-react";
 import Link from "next/link";
+import ProgressButton from "./ProgressButton";
 
 interface SectionsDetailsProps {
   course: Course;
@@ -62,7 +63,11 @@ const SectionsDetails = ({
             )}
           </Button>
         ) : (
-          <Button>Mark as Complete</Button>
+          <ProgressButton
+            courseId={course.id}
+            sectionId={section.id}
+            isCompleted={!!progress?.isCompleted}
+          />
         )}
       </div>
 
@@ -70,11 +75,11 @@ const SectionsDetails = ({
 
       {isLocked ? (
         <div className="py-10 flex flex-col gap-5 items-center bg-[#FFF8EB]">
-        <Lock className="h-8 w-8" />
-        <p className="text-sm font-bold">
-          Video for this section is locked!. Please buy the course to access
-        </p>
-      </div>
+          <Lock className="h-8 w-8" />
+          <p className="text-sm font-bold">
+            Video for this section is locked!. Please buy the course to access
+          </p>
+        </div>
       ) : (
         <MuxPlayer
           playbackId={muxData?.playbackId || ""}
