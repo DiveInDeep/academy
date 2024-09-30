@@ -1,23 +1,40 @@
 "use client";
 
 import { useAuth, UserButton } from "@clerk/nextjs";
-import { Search } from "lucide-react";
+import { BarChart4, Menu, MonitorPlay, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Topbar = () => {
   const { isSignedIn } = useAuth();
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
+  const pathName = usePathname();
 
   const topRoutes = [
     { label: "Instructor", path: "/instructor/courses" },
     {
       label: "Learning",
       path: "/learning ",
+    },
+  ];
+
+  const sidebarRooutes = [
+    { label: "Course", path: "/instructor/courses" },
+    {
+      label: "Performance",
+      path: "/instructor/performance",
     },
   ];
 
@@ -60,6 +77,41 @@ const Topbar = () => {
             </Link>
           ))}
         </div>
+
+        <div className="w-full max-w-[200px] z-20 sm:hidden">
+          <Sheet>
+            <SheetTrigger>
+              <Menu className="w-5 h-5" />
+            </SheetTrigger>
+            <SheetContent className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4">
+                {topRoutes.map((route) => (
+                  <Link
+                    href={route.path}
+                    key={route.path}
+                    className="text-sm font-medium hover:text-[#FDAB04]"
+                  >
+                    {route.label}
+                  </Link>
+                ))}
+              </div>
+              {pathName.startsWith("/instructor") && (
+                <div className="flex flex-col gap-4">
+                  {sidebarRooutes.map((route) => (
+                    <Link
+                      href={route.path}
+                      key={route.path}
+                      className="text-sm font-medium hover:text-[#FDAB04]"
+                    >
+                      {route.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </SheetContent>
+          </Sheet>
+        </div>
+
         {isSignedIn ? (
           <UserButton afterSignOutUrl="/sign-in" />
         ) : (

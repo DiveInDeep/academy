@@ -19,6 +19,13 @@ const SectionDetailsPage = async ({
 
   const course = await db.course.findUnique({
     where: { id: courseId, isPublished: true },
+    include: {
+      sections: {
+        where: {
+          isPublished: true,
+        },
+      },
+    },
   });
 
   if (!course) {
